@@ -11,7 +11,7 @@ conn = sqlite3.connect('database.db')
 cur = conn.cursor()
 cur.execute("DROP TABLE people")
 conn.commit()
-cur.execute("CREATE TABLE people (Name PRIMARY KEY, Grade, Room, Telnum, Picture, Keywords);")
+cur.execute("CREATE TABLE people (Name, Grade, Room, Telnum, Picture, Keywords);")
 @app.route('/upload', methods=['GET','POST'])
 def csvtodb():
     if request.method == 'POST':
