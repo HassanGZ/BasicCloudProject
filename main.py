@@ -59,7 +59,7 @@ def addrec():
             with sql.connect("database.db") as con:
                 cur = con.cursor()
 
-                cur.execute("INSERT INTO people (name,grade,room,telnum,picture,keywords) VALUES (?,?,?,?)", (nm, addr, city, pin))
+                cur.execute("INSERT INTO people (name,grade,room,telnum,picture,keywords) VALUES (?,?,?,?)", (name, grade, room, telnum,picture,keywords))
 
                 con.commit()
                 msg = "Record successfully added"
