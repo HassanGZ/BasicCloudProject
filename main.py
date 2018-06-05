@@ -30,7 +30,7 @@ def csvtodb():
 
     cur.executemany("INSERT INTO people (Name, Grade, Room, Telnum, Picture, Keywords) VALUES (?, ? ,? ,? ,? ,?);", to_db)
     conn.commit()
-    cur.execute("select * from people")
+    #cur.execute("select * from people")
     conn.close()
     return render_template('home.html')
 
