@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+	<body>
+
+		<center>
+		<header> <h1> Home </h1> </header>
+		<br> <br>
+		<!--<h2> This portal records the details of students (Name, Address, State and ZIP)</h2> -->
+            <h2> Upload CSV File and Pictures here !! </h2>
+            <form action="http://127.0.0.1:5000/upload" method="POST" enctype = "multipart/form-data">
+            CSV File:  <input type="file" name="myfile"><br>
+            <br>
+            <input type="submit" name="Submit"><br>
+            </form>
+            <br>
+            <form action="http://127.0.0.1:5000/picture" method="POST" enctype = "multipart/form-data">
+            Picture:   <input type="file" name="picfile"><br>
+		    <br>
+            <input type="submit" name="Submit"><br>
+            </form>
+            <br>
+		<h2><a href = "/enternew">Enter People Details</a></h2> <br>
+		<h2><a href = "/list">Retrive People Details</a></h2>
+      
+	</body>
+</html>
