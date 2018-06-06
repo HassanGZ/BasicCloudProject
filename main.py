@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request
 import sqlite3 as sql
 import cgi
@@ -12,13 +13,17 @@ cur = conn.cursor()
 cur.execute("DROP TABLE people")
 conn.commit()
 cur.execute("CREATE TABLE people (Name, Grade, Room, Telnum, Picture, Keywords);")
-@app.route('/upload', methods=['GET','POST'])
+cur.execute("DROP TABLE img")
+conn.commit()
+cur.execute("CREATE TABLE img (id NUMBER, name TEXT, bin BLOB);")
+UPLOAD_FOLDER = os.path.basename('uploads/')
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+@app.route('/csvtodb', methods=['GET','POST'])
 def csvtodb():
     if request.method == 'POST':
         file = request.files['myfile']
     conn = sqlite3.connect('database.db')
-    #form = cgi.FieldStorage()
-    #myfile = form.getvalue('myfile')
     #print("Opened database successfully")
     cur = conn.cursor()
     #cur.execute("DROP TABLE people")
@@ -28,12 +33,33 @@ def csvtodb():
         dr = csv.DictReader(fin)
         to_db = [(i['Name'], i['Grade'], i['Room'], i['Telnum'], i['Picture'], i['Keywords']) for i in dr]
 
-    cur.executemany("INSERT INTO people (Name, Grade, Room, Telnum, Picture, Keywords) VALUES (?, ? ,? ,? ,? ,?);", to_db)
+    cur.executemany("INSERT INTO people (Name , Grade, Room, Telnum, Picture, Keywords) VALUES (?, ? ,? ,? ,? ,?);", to_db)
     conn.commit()
     #cur.execute("select * from people")
     conn.close()
     return render_template('home.html')
 
+
+#def picture():
+#    conn = sqlite3.connect('database.db')
+##    cur = conn.cursor()
+ #   cur.execute('Insert into img (id, name, bin) values(?, ?, ?);', (id, name, sqlite3.Binary(file.read())))
+@app.route('/getpic',methods = ['POST','Get'])
+def getpic():
+   if request.method == 'POST':
+      file = request.files['pic']
+      f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+      file.save(f)
+      return render_template("home.html")
+
+@app.route("/search", methods=['GET', 'POST'])
+def search():
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    cur.execute('SELECT picture FROM people WHERE Name = %s', (request.form["search"],))
+    result = cur.fetchall()
+    cur.close()
+    return render_template('results.html', result = result)
 
 @app.route('/')
 def home():

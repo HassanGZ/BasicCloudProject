@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result of picture</title>
+</head>
+<body>
+    <table border = 1>
+         <thead>
+            <td>Picture</td>
+         </thead>
+         {% for row in rows %}
+         <tr>
+            <td>{{row["picture"]}}</td>
+         </tr>
+         {% endfor %}
+      </table>
+</body>
+</html>
