@@ -23,6 +23,8 @@ cur.execute("DROP TABLE people")
 conn.commit()
 #executing create table query
 cur.execute("CREATE TABLE people (name, grade, room, telnum, picture, keywords);")
+cur.execute("DROP TABLE course")
+cur.execute("CREATE TABLE course (id, days, start, end, approval, max, current, seats, wait, instructor, courseno, section);")
 cur.execute("DROP TABLE pic")
 conn.commit()
 #executing create table query
@@ -33,6 +35,27 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 @app.route('/')
 def index():
     return render_template('home.html')
+
+@app.route('/course')
+def course():
+    return render_template('courseform.html')
+
+@app.route('/search_by_no', methods=['GET','POST'])
+def search_by_no():
+    con = sql.connect("database.db")
+    cur = con.cursor()
+    cur.execute("select instructor, courseno, start, end from course where courseno = ? and day = ? ", (request.form['cno']),(request.form['day']))
+    rows = cur.fetchall()
+    if len(rows) == 0:
+        return render_template("sresult.html", res=[request.form['name'], ''])
+    cur.execute("select img from pic where picture = ? ", (str(rows[0][0]).lower(),))
+    rows = cur.fetchall()
+    if len(rows) == 0:
+        images = ''
+    else:
+        # decode the image
+        images = rows[0][0].decode('utf-8')
+    return render_template("sresult.html", res=[request.form['name'], images])
 
 @app.route('/newpic')
 def newpic():

@@ -12,7 +12,7 @@ Assignment 1
 		<!--<h2> This portal records the details of students (Name, Address, State and ZIP)</h2> -->
             <h2>Pradeep Ravichandran</h2>
             <h2>1001553352</h2>
-            
+
             <h3> You can Upload CSV Files and Pictures here !! </h3>
             <form action="{{ url_for('csvtodb') }}" method="POST" enctype = "multipart/form-data">
             CSV File:  <input type="file" name="myfile"><br>
@@ -26,7 +26,8 @@ Assignment 1
             <input type="submit" name="Submit"><br>
             </form>
             <br>
-
+            <img src="../batman.jpg" alt="me">
+            <h2><a href="/course">Search Course Details</a></h2>
 	    	<h2><a href = "/list">Retrieve People Details</a></h2>
             <h2><a href = "/deletionpage">Delete User</a></h2>
             <h2><a href="/editingpage">Edit </a> </h2>
