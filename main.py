@@ -140,7 +140,7 @@ def list():
     return render_template("list.html", rows=rows)
 
 #function to search picture using name
-@app.route('/nsearch', methods=['POST', 'GET'])
+@app.route('/search_by_name', methods=['POST', 'GET'])
 def search_by_name():
     con = sql.connect("database.db")
     cur = con.cursor()
@@ -158,7 +158,7 @@ def search_by_name():
     return render_template("sresult.html", res=[request.form['name'], images])
 
 #function for searching using grade
-@app.route('/gsearch', methods=['POST', 'GET'])
+@app.route('/search_by_grade', methods=['POST', 'GET'])
 def search_by_grade():
     con = sql.connect("database.db")
     cur = con.cursor()
@@ -204,7 +204,7 @@ def addimage():
     return render_template("result.html", msg="Data Updated successfully")
 
 #function to remove people
-@app.route('/deletepeople', methods=['POST', 'GET'])
+@app.route('/delete_people', methods=['POST', 'GET'])
 def delete_people():
     con = sql.connect("database.db")
     cur = con.cursor()
