@@ -36,6 +36,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def index():
     return render_template('home.html')
 
+#def size(dir):
+#    size = os.path.getsize(dir)
+#    return render_template("home.html",size)
+#dir=python-docs-hello-world
+#size(dir)
 @app.route('/course')
 def course():
     return render_template('courseform.html')
@@ -44,18 +49,18 @@ def course():
 def search_by_no():
     con = sql.connect("database.db")
     cur = con.cursor()
-    cur.execute("select instructor, courseno, start, end from course where courseno = ? and day = ? ", (request.form['cno']),(request.form['day']))
+    cur.execute("select instructor, courseno, start, end from course where courseno = ? and days = ? ", (request.form['cno'],(request.form['days'])))
     rows = cur.fetchall()
-    if len(rows) == 0:
-        return render_template("sresult.html", res=[request.form['name'], ''])
-    cur.execute("select img from pic where picture = ? ", (str(rows[0][0]).lower(),))
-    rows = cur.fetchall()
-    if len(rows) == 0:
-        images = ''
-    else:
+    #if len(rows) == 0:
+        #return render_template("sresult.html", res=[request.form['courseno'],request.form['days'], ''])
+    #cur.execute("select img from pic where picture = ? ", (str(rows[0][0]).lower(),))
+    #rows = cur.fetchall()
+    #if len(rows) == 0:
+    #    images = ''
+    #else:
         # decode the image
-        images = rows[0][0].decode('utf-8')
-    return render_template("sresult.html", res=[request.form['name'], images])
+    #    images = rows[0][0].decode('utf-8')
+    return render_template("sresult.html", res=[request.form['cno'],request.form['days'], images])
 
 @app.route('/newpic')
 def newpic():
