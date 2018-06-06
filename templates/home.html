@@ -1,3 +1,8 @@
+<!--Name:PRADEEP RAVICHANDRAN
+ID:1001553352
+CSE 6331-Cloud Computing
+Assignment 1
+-->
 <!doctype html>
 <html>
 	<body>
@@ -12,15 +17,20 @@
             <input type="submit" name="Submit"><br>
             </form>
             <br>
-            <form action="{{ url_for('getpic') }}" method="POST" enctype = "multipart/form-data">
-            Picture:   <input type="file" name="pic"><br>
+            <form action="{{ url_for('csvtodb') }}" method="POST" enctype = "multipart/form-data">
+            Picture:   <input type="file" name="images"><br>
 		    <br>
             <input type="submit" name="Submit"><br>
             </form>
             <br>
 
-		<h2><a href = "/list">Retrieve People Details</a></h2>
-      <h2><a href = "/images">Pictures</a></h2>
+	    	<h2><a href = "/list">Retrieve People Details</a></h2>
+            <h2><a href = "/deletionpage">Delete User</a></h2>
+            <h2><a href="/editingpage">Edit </a> </h2>
+            <h2><a href="/namesearch">Search Name </a> </h2>
+            <h2><a href="/gradesearch">Search using Grade </a> </h2>
+            <h2><a href="/newpic">Add picture for Someone </a> </h2>
 
+        </center>
 	</body>
 </html>

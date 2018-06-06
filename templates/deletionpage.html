@@ -1,0 +1,29 @@
+<!--Name:PRADEEP RAVICHANDRAN
+ID:1001553352
+CSE 6331-Cloud Computing
+Assignment 1
+-->
+<!DOCTYPE html>
+<html lang="en" xmlns:Name="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border = 1>
+         <thead>
+            <td>Name</td>
+         </thead>
+
+         {% for row in rows %}
+         <tr>
+            <td>{{ row }}</td>
+    </tr>
+         {% endfor %}
+</table>
+<form action="{{ url_for('delpeo')}}" method="post">
+Enter the Name:<input type="text" name="name">
+<input type="submit" value="submit">
+    </form>
+</body>
+</html>

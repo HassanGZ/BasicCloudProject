@@ -1,0 +1,24 @@
+<!--Name:PRADEEP RAVICHANDRAN
+ID:1001553352
+CSE 6331-Cloud Computing
+Assignment 1
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="{{ url_for('gsearch')}}" method="post" enctype="multipart/form-data">
+     Enter Operation:
+    <input type="radio" name="op" value="lt" checked>Less than
+    <input type="radio" name="op" value="gt">Greater than
+    <input type="radio" name="op" value="eq">Equal
+    Enter Grade:<input type="text" name="grade">
+
+<input type="submit" value="Submit">
+    </form>
+
+</body>
+</html>

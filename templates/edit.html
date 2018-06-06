@@ -1,0 +1,42 @@
+<!--Name:PRADEEP RAVICHANDRAN
+ID:1001553352
+CSE 6331-Cloud Computing
+Assignment 1
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border = 1>
+         <thead>
+            <td>Grade</td>
+            <td>Room</td>
+            <td>Telnum</td>
+            <td>Keywords</td>
+         </thead>
+
+         {% for row in rows %}
+         <tr>
+            <td>{{row["grade"]}}</td>
+            <td> {{row["room"]}}</td>
+            <td>{{row["telnum"]}}</td>
+            <td> {{row["keywords"]}}</td>
+         </tr>
+         {% endfor %}
+      </table>
+<br>
+<br>
+<form action="{{ url_for('updatedata')}}" method="post" enctype="multipart/form-data">
+    Enter Grade:<input type="text" name="grade">
+     Enter Room:<input type="number" name="room">
+     Enter Telnum:<input type="number" name="telnum">
+    Enter Keywords:<input type="text" name="keywords">
+     Name: <input type="text" name="username" >
+<input type="submit" value="Submit">
+    </form>
+
+</body>
+</html>
