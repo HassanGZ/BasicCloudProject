@@ -109,6 +109,9 @@ def list():
     rows = cur.fetchall();
     return render_template("list.html", rows=rows)
 
+@app.route('/images')
+def img():
+    return render_template('new.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
