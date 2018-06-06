@@ -107,12 +107,12 @@ def csvtodb():
             con.close()
 
 
-@app.route('/namesearch')
+@app.route('/namesearch', methods=['GET','POST'])
 def name_search():
     return render_template('namesearch.html')
 
 
-@app.route('/gradesearch')
+@app.route('/gradesearch', methods=['GET','POST'])
 def grade_search():
     return render_template('gradesearch.html')
 
@@ -204,7 +204,7 @@ def addimage():
     return render_template("result.html", msg="Data Updated successfully")
 
 #function to remove people
-@app.route('/delpeo', methods=['POST', 'GET'])
+@app.route('/deletepeople', methods=['POST', 'GET'])
 def delete_people():
     con = sql.connect("database.db")
     cur = con.cursor()
