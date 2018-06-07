@@ -10,8 +10,25 @@ Assignment 1
     <title>Title</title>
 </head>
 <body>
-{{res}}
-<img src="images" alt = "Image of Student" />
+ <table border = 1>
+         <thead>
+            <td>Instructor</td>
+            <td>Course</td>
+            <td>Start</td>
+            <td>End</td>
+
+         </thead>
+
+         {% for row in rows %}
+         <tr><td>{{row["instructor"]}}</td>
+            <td>{{row["courseno"]}}</td>
+            <td> {{row["start"]}}</td>
+            <td>{{row["end"]}}</td>
+
+         </tr>
+         {% endfor %}
+      </table>
+
 
 </body>
 </html>

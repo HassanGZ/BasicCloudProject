@@ -36,8 +36,6 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def index():
     return render_template('home.html')
 
-#def size(dir):
-#    size = os.path.getsize(dir)
 #    return render_template("home.html",size)
 #dir=python-docs-hello-world
 #size(dir)
@@ -49,19 +47,24 @@ def course():
 def search_by_no():
     con = sql.connect("database.db")
     cur = con.cursor()
-    cur.execute("select instructor, courseno, start, end from course where courseno = ? and days = ? ", (request.form['cno'],(request.form['days'])))
+    cur.execute("select instructor, courseno, start, end from course where courseno = ? and days = ? ",((request.form['cno']), (request.form['days'])))
     rows = cur.fetchall()
-    #if len(rows) == 0:
-        #return render_template("sresult.html", res=[request.form['courseno'],request.form['days'], ''])
+    if len(rows) == 0:
+        return render_template("sresult.html", res=[request.form['cno'],request.form['days'], ''])
     #cur.execute("select img from pic where picture = ? ", (str(rows[0][0]).lower(),))
     #rows = cur.fetchall()
     #if len(rows) == 0:
     #    images = ''
-    #else:
-        # decode the image
-    #    images = rows[0][0].decode('utf-8')
-    return render_template("sresult.html", res=[request.form['cno'],request.form['days'], images])
-
+    else:
+        #decode the image
+        #images = rows[0][0].decode('utf-8')
+        return render_template("sresult.html", res=[request.form['cno'],request.form['days'],''])
+@app.route('/getsize')
+def getsize():
+    cwd = os.getcwd()
+    # def size(dir):
+    size = os.path.getsize(cwd)
+    return render_template('size.html',size=size)
 @app.route('/newpic')
 def newpic():
    con = sql.connect("database.db")
@@ -88,6 +91,7 @@ def editingpage():
 
 @app.route('/csvtodb', methods=['GET','POST'])
 def csvtodb():
+
     if request.method == 'POST':
         data_len = {}
         try:
@@ -95,6 +99,7 @@ def csvtodb():
             for i in range(len(fname)):
                 print(fname[i].filename)
                 filename =fname[i].filename
+
                 file = fname[i]
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 file.close()
@@ -119,9 +124,9 @@ def csvtodb():
                 #cur.execute("CREATE TABLE people (Name PRIMARY KEY, Grade, Room, Telnum, Picture, Keywords);")
             with open(file.filename, 'r') as fin:
                 dr = csv.DictReader(fin)
-                to_db = [(i['Name'], i['Grade'], i['Room'], i['Telnum'], i['Picture'], i['Keywords']) for i in dr]
+                to_db = [(i['ID'], i['Days'], i['Start'], i['End'], i['Approval'], i['Max'], i['Current'], i['Seats'], i['Wait'], i['Instructor'], i['Course'], i['Section']) for i in dr]
 
-                cur.executemany("INSERT INTO people (name , grade, room, telnum, picture, keywords) VALUES (?, ? ,? ,? ,? ,?);", to_db)
+                cur.executemany("INSERT INTO course (id, days, start, end, approval, max, current, seats, wait, instructor, courseno, section) VALUES (?, ? ,? ,? ,? ,?, ?, ? ,? ,? ,? ,?);", to_db)
                 conn.commit()
                 #cur.execute("select * from people")
                 conn.close()
@@ -163,7 +168,7 @@ def list():
     con = sql.connect("database.db")
     con.row_factory = sql.Row
     cur = con.cursor()
-    cur.execute("select * from people")
+    cur.execute("select * from course")
     rows = cur.fetchall();
     return render_template("list.html", rows=rows)
 
