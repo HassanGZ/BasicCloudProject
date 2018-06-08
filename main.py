@@ -7,7 +7,6 @@
 import os
 from flask import Flask, render_template, request
 import sqlite3 as sql
-#from werkzeug import secure_filename
 #ALLOWED EXTENSIONS is used to restrict the types of input files uploaded by the user
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 app = Flask(__name__)
@@ -15,30 +14,27 @@ UPLOAD_FOLDER = 'templates/'
 
 import sqlite3, csv, base64
 #sqlite database connection
-conn = sqlite3.connect('database.db')
+con = sqlite3.connect('database.db')
 
 #creating cursor to perform database operations
-cur = conn.cursor()
-cur.execute("DROP TABLE people")
-conn.commit()
+cursor = con.cursor()
+cursor.execute("DROP TABLE people")
+con.commit()
 #executing create table query
-cur.execute("CREATE TABLE people (name, grade, room, telnum, picture, keywords);")
-cur.execute("DROP TABLE course")
-cur.execute("CREATE TABLE course (id, days, start, end, approval, max, current, seats, wait, instructor, courseno, section);")
-cur.execute("DROP TABLE pic")
-conn.commit()
+cursor.execute("CREATE TABLE people (name, grade, room, telnum, picture, keywords);")
+cursor.execute("DROP TABLE course")
+cursor.execute("CREATE TABLE course (id, days, start, end, approval, max, current, seats, wait, instructor, courseno, section);")
+cursor.execute("DROP TABLE pic")
+con.commit()
 #executing create table query
-cur.execute("CREATE TABLE pic (picture TEXT, img BLOB);")
-UPLOAD_FOLDER = os.path.basename('uploads/')
+cursor.execute("CREATE TABLE pic (picture TEXT, img BLOB);")
+#UPLOAD_FOLDER = os.path.basename('uploads/')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 #@app.route are decorators in Flask
 @app.route('/')
 def index():
     return render_template('home.html')
 
-#    return render_template("home.html",size)
-#dir=python-docs-hello-world
-#size(dir)
 @app.route('/course')
 def course():
     return render_template('courseform.html')
@@ -46,98 +42,95 @@ def course():
 @app.route('/search_by_no', methods=['GET','POST'])
 def search_by_no():
     con = sql.connect("database.db")
-    cur = con.cursor()
-    cur.execute("select instructor, courseno, start, end from course where courseno = ? and days = ? ",((request.form['cno']), (request.form['days'])))
-    rows = cur.fetchall()
+    cursor = con.cursor()
+    cursor.execute("select instructor, courseno, start, end from course where courseno = ? and days = ? ",((request.form['cno']), (request.form['days'])))
+    rows = cursor.fetchall()
     if len(rows) == 0:
         return render_template("sresult.html", res=[request.form['cno'],request.form['days'], ''])
-    #cur.execute("select img from pic where picture = ? ", (str(rows[0][0]).lower(),))
-    #rows = cur.fetchall()
+    #cursor.execute("select img from pic where picture = ? ", (str(rows[0][0]).lower(),))
+    #rows = cursor.fetchall()
     #if len(rows) == 0:
     #    images = ''
     else:
         #decode the image
         #images = rows[0][0].decode('utf-8')
         return render_template("sresult.html", res=[request.form['cno'],request.form['days'],''])
+
 @app.route('/getsize')
 def getsize():
     cwd = os.getcwd()
-    # def size(dir):
     size = os.path.getsize(cwd)
     return render_template('size.html',size=size)
+
 @app.route('/newpic')
 def newpic():
    con = sql.connect("database.db")
-   cur = con.cursor()
-   cur.execute("select name from people")
-   rows = cur.fetchall()
+   cursor = con.cursor()
+   cursor.execute("select name from people")
+   rows = cursor.fetchall()
    return render_template('newpic.html', rows=rows)
 
 @app.route('/deletionpage')
 def deletionpage():
    con = sql.connect("database.db")
-   cur = con.cursor()
-   cur.execute("select name from people")
-   rows = cur.fetchall()
+   cursor = con.cursor()
+   cursor.execute("select name from people")
+   rows = cursor.fetchall()
    return render_template('deletionpage.html',rows = rows)
 
 @app.route('/editingpage')
 def editingpage():
    con = sql.connect("database.db")
-   cur = con.cursor()
-   cur.execute("select name from people")
-   rows = cur.fetchall()
+   cursor = con.cursor()
+   cursor.execute("select name from people")
+   rows = cursor.fetchall()
    return render_template('editingpage.html',rows = rows)
 
 @app.route('/csvtodb', methods=['GET','POST'])
 def csvtodb():
 
     if request.method == 'POST':
-        data_len = {}
+        dlen = {}
         try:
             fname = request.files.getlist("images")
             for i in range(len(fname)):
                 print(fname[i].filename)
-                filename =fname[i].filename
-
+                filename = fname[i].filename
                 file = fname[i]
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                file.close()
-                readimg = fname[i]
-                img = readimg.read()
-                data_len[fname[i].filename] = len(img)
+                myfile = open('templates/'+filename,'rb')
+                readimg = myfile
+                image = readimg.read()
+                dlen[filename] = len(image)
                 #using base64 to encode image
-                img = base64.b64encode(img)
+                image = base64.b64encode(image)
                 con = sql.connect("database.db")
-                cur = con.cursor()
+                cursor = con.cursor()
                 #inserting image into table 'pic'
-                cur.execute("INSERT INTO pic(picture,img) values(?,?)", (fname[i].filename.lower(), img))
+                cursor.execute("INSERT INTO pic(picture,img) values(?,?)", (fname[i].filename.lower(), image))
                 con.commit()
             #converting csv file into table with values
             if request.method == 'POST':
                  file = request.files['myfile']
-            conn = sqlite3.connect('database.db')
-                #print("Opened database successfully")
-            cur = conn.cursor()
-                #cur.execute("DROP TABLE people")
-                #conn.commit()
-                #cur.execute("CREATE TABLE people (Name PRIMARY KEY, Grade, Room, Telnum, Picture, Keywords);")
-            with open(file.filename, 'r') as fin:
-                dr = csv.DictReader(fin)
-                to_db = [(i['ID'], i['Days'], i['Start'], i['End'], i['Approval'], i['Max'], i['Current'], i['Seats'], i['Wait'], i['Instructor'], i['Course'], i['Section']) for i in dr]
+                 con = sqlite3.connect('database.db')
+                 cursor = con.cursor()
+            with open(file.filename, 'r') as finput:
+                read = csv.DictReader(finput)
+                fromcsv = [(i['Name'], i['Grade'], i['Room'], i['Telnum'], i['Picture'], i['Keywords']) for i in read]
 
-                cur.executemany("INSERT INTO course (id, days, start, end, approval, max, current, seats, wait, instructor, courseno, section) VALUES (?, ? ,? ,? ,? ,?, ?, ? ,? ,? ,? ,?);", to_db)
-                conn.commit()
-                #cur.execute("select * from people")
-                conn.close()
+                cursor.executemany("INSERT INTO people (name, grade, room, telnum, picture, keywords) VALUES (?, ? ,? ,? ,? ,?);", fromcsv)
+                con.commit()
+                #cursor.execute("select * from people")
+                con.close()
                 msg = "Record successfully added"
         except:
                 con.rollback()
-                msg = "Error occured while performing the operation"
+                msg = "Error"
         finally:
             msg="Performed Successfully"
             return render_template("home.html")
             con.close()
+            print(msg)
 
 
 @app.route('/namesearch', methods=['GET','POST'])
@@ -149,128 +142,116 @@ def name_search():
 def grade_search():
     return render_template('gradesearch.html')
 
-
-#def picture():
-#    conn = sqlite3.connect('database.db')
-##    cur = conn.cursor()
- #   cur.execute('Insert into img (id, name, bin) values(?, ?, ?);', (id, name, sqlite3.Binary(file.read())))
-#@app.route('/getpic',methods = ['POST','Get'])
-#def getpic():
-#   if request.method == 'POST':
-#      file = request.files['pic']
-#      f = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-#      file.save(f)
-#      return render_template("home.html")
-
 #function to list the table
 @app.route('/list')
 def list():
     con = sql.connect("database.db")
     con.row_factory = sql.Row
-    cur = con.cursor()
-    cur.execute("select * from course")
-    rows = cur.fetchall();
+    cursor = con.cursor()
+    cursor.execute("select * from people")
+    rows = cursor.fetchall();
     return render_template("list.html", rows=rows)
 
 #function to search picture using name
 @app.route('/search_by_name', methods=['POST', 'GET'])
 def search_by_name():
     con = sql.connect("database.db")
-    cur = con.cursor()
-    cur.execute("select picture from people where name = ? ", (request.form['name'],))
-    rows = cur.fetchall()
+    cursor = con.cursor()
+    cursor.execute("select picture from people where name = ? ", (request.form['name'],))
+    rows = cursor.fetchall()
     if len(rows) == 0:
-        return render_template("sresult.html", res=[request.form['name'], ''])
-    cur.execute("select img from pic where picture = ? ", (str(rows[0][0]).lower(),))
-    rows = cur.fetchall()
+        return render_template("results.html", res=[request.form['name'], ''])
+    cursor.execute("select img from pic where picture = ? ", (str(rows[0][0]).lower(),))
+    rows = cursor.fetchall()
     if len(rows) == 0:
-        images = ''
+        pictures = ''
     else:
         #decode the image
-        images = rows[0][0].decode('utf-8')
-    return render_template("sresult.html", res=[request.form['name'], images])
+        pictures = rows[0][0].decode('utf-8')
+    return render_template("results.html", res=[request.form['name'], pictures])
 
 #function for searching using grade
 @app.route('/search_by_grade', methods=['POST', 'GET'])
 def search_by_grade():
     con = sql.connect("database.db")
-    cur = con.cursor()
-    op = request.form['op']
-    if op == 'lt':
-        cur.execute("select i.img from people p,pic i where p.picture=i.picture and grade < ? ",
-                    (request.form['grade'],))
-    elif op == 'gt':
-        cur.execute("select i.img from people p,pic i where p.picture=i.picture and grade > ? ",
-                    (request.form['grade'],))
+    cursor = con.cursor()
+    operation = request.form['op']
+    print(operation)
+    if operation == 'lt':
+        cursor.execute("select i.img from people p,pic i where p.picture=i.picture and grade < ? ",(request.form['grade'],))
+    elif operation == 'gt':
+        cursor.execute("select i.img from people p,pic i where p.picture=i.picture and grade > ? ",(request.form['grade'],))
     else:
-        cur.execute("select i.img from people p,pic i where p.picture=i.picture and grade = ? ",
-                    (request.form['grade'],))
-    rows = cur.fetchall()
+        cursor.execute("select i.img from people p,pic i where p.picture=i.picture and grade = ? ",(request.form['grade'],))
+    rows = cursor.fetchall()
+    print(rows)
     if len(rows) == 0:
-        return render_template("sresult.html", res=[op, request.form['grade'], ''])
-    images = []
+        return render_template("gimg.html", res=[operation, request.form['grade'], ''])
+    pictures = []
     for row in rows:
-        images.append(row[0].decode('utf-8'))
-    return render_template("gimg.html", res=[op, request.form['grade'], images])
+       pictures.append(row[0].decode('utf-8'))
+    #else:
+        #images = rows[0][0].decode('utf-8')
+    return render_template("gimg.html", res=[request.form['grade'], pictures])
 
 #function to add image for people
 @app.route('/addimage', methods=['POST', 'GET'])
 def addimage():
     con = sql.connect("database.db")
-    cur = con.cursor()
+    cursor = con.cursor()
     op = request.form['name']
     readimg = request.files.get("images")
     fname = readimg.filename
-    img = readimg.read()
-    img = base64.b64encode(img)
-    cur.execute("update people set picture = ? where name = ?", (fname.lower(), op))
+    image = readimg.read()
+    image = base64.b64encode(image)
+    cursor.execute("update people set picture = ? where name = ?", (fname.lower(), op))
     con.commit()
-    cur.execute("select img from pic where picture = ? ", (fname.lower(),))
-    rows = cur.fetchall()
+    cursor.execute("select img from pic where picture = ? ", (fname.lower(),))
+    rows = cursor.fetchall()
     if len(rows) == 0:
-        cur.execute("insert into pic(picture,img) values(?,?)", (fname.lower(), img))
+        cursor.execute("insert into pic(picture,img) values(?,?)", (fname.lower(), image))
         con.commit()
     else:
-        cur.execute("update pic set img = ? where picture = ?", (img, fname.lower()))
+        cursor.execute("update pic set img = ? where picture = ?", (image, fname.lower()))
         con.commit()
     con.close()
-    return render_template("result.html", msg="Data Updated successfully")
+    return render_template("result.html", msg="Picture Added successfully")
 
 #function to remove people
 @app.route('/delete_people', methods=['POST', 'GET'])
 def delete_people():
     con = sql.connect("database.db")
-    cur = con.cursor()
-    cur.execute("select picture from people where name=?", (request.form['name'],))
-    rows = cur.fetchall()
-    cur.execute("delete from people where name = ?", (request.form['name'],))
+    cursor = con.cursor()
+    cursor.execute("select picture from people where name=?", (request.form['name'],))
+    rows = cursor.fetchall()
+    cursor.execute("delete from people where name = ?", (request.form['name'],))
     # con.commit()
     print(rows)
-    cur.execute("delete from pic where picture = ?", rows[0])
+    cursor.execute("delete from pic where picture = ?", rows[0])
     con.commit()
     con.close()
-    return render_template("result.html", msg="Data Updated successfully")
+    return render_template("deleteresult.html", msg="Record Deleted successfully")
 
 #function to edit any column in the table 'people'
 @app.route('/edit', methods=['POST', 'GET'])
 def edit():
     con = sql.connect("database.db")
     con.row_factory = sql.Row
-    cur = con.cursor()
-    cur.execute("select * from people where name=?", (request.form['name'],))
-    rows = cur.fetchall();
+    cursor = con.cursor()
+    cursor.execute("select * from people where name=?", (request.form['name'],))
+    rows = cursor.fetchall();
     return render_template("edit.html", rows=rows)
 
 #function to update any column in table 'people'
 @app.route('/updatedata', methods=['POST', 'GET'])
 def updatedata():
     con = sql.connect("database.db")
-    cur = con.cursor()
-    cur.execute("update people set grade = ?,room=?,telnum=?,keywords=? where name = ?",
+    cursor = con.cursor()
+    cursor.execute("update people set grade = ?,room=?,telnum=?,keywords=? where name = ?",
                 (request.form['grade'], request.form['room'], request.form['telnum'], request.form['keywords'],request.form['username']))
     con.commit()
     con.close()
-    return render_template("result.html", msg="Data Updated successfully")
+    return render_template("result.html", msg="Data Edited successfully")
 
 if __name__ == '__main__':
     app.run(debug=True)

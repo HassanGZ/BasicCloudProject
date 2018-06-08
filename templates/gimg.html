@@ -7,10 +7,15 @@ Assignment 1
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Result</title>
 </head>
 <body>
-{{res}}
-<img src="images" alt = "Image" />
+<center>
+       <h2>Pradeep Ravichandran</h2>
+         <h2>1001553352</h2>
+</center>
+{% for r in res[1] %}
+<img src="data:image/jpeg;base64,{{ r }}" alt = "Image" />
+{% endfor %}
 </body>
 </html>

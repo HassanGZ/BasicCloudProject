@@ -7,14 +7,18 @@ Assignment 1
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Grade Search</title>
 </head>
 <body>
+ <center>
+       <h2>Pradeep Ravichandran</h2>
+         <h2>1001553352</h2>
+   </center>
 <form action="{{ url_for('search_by_grade')}}" method="post" enctype="multipart/form-data">
      Enter Operation:
     <input type="radio" name="op" value="lt" checked>Less than
     <input type="radio" name="op" value="gt">Greater than
-    <input type="radio" name="op" value="eq">Equal
+    <input type="radio" name="op" value="eq">Equal <br>
     Enter Grade:<input type="text" name="grade">
 
 <input type="submit" value="Submit">

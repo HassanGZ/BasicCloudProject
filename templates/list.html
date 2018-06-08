@@ -7,41 +7,33 @@ Assignment 1
 <html>
 
    <body>
-
    <center>
-      <header> <h1> This page lists the People records </h1>
+       <h2>Pradeep Ravichandran</h2>
+         <h2>1001553352</h2>
+   </center>
+
+
+         <header> <h1> This page lists the People records </h1>
       </header>
       <br> <br>
       <table border = 1>
          <thead>
-            <td>ID</td>
-            <td>Days</td>
-            <td>Start</td>
-            <td>End</td>
-            <td>Approval</td>
-            <td>Max</td>
-            <td>Current</td>
-            <td>Seats</td>
-            <td>Wait</td>
-            <td>Instructor</td>
-            <td>Course</td>
-            <td>Section</td>
+            <td>Name</td>
+            <td>Grade</td>
+            <td>Room</td>
+            <td>Telnum</td>
+            <td>Picture</td>
+            <td>Keywords</td>
          </thead>
 
          {% for row in rows %}
          <tr>
-            <td>{{row["id"]}}</td>
-            <td>{{row["days"]}}</td>
-            <td> {{row["start"]}}</td>
-            <td>{{row["end"]}}</td>
-            <td>{{row["approval"]}}</td>
-            <td> {{row["max"]}}</td>
-            <td>{{row["current"]}}</td>
-            <td>{{row["seats"]}}</td>
-            <td> {{row["wait"]}}</td>
-            <td>{{row["instructor"]}}</td>
-            <td>{{row["courseno"]}}</td>
-            <td> {{row["section"]}}</td>
+            <td>{{row["name"]}}</td>
+            <td>{{row["grade"]}}</td>
+            <td> {{row["room"]}}</td>
+            <td>{{row["telnum"]}}</td>
+            <td>{{row["picture"]}}</td>
+            <td> {{row["keywords"]}}</td>
          </tr>
          {% endfor %}
       </table>
