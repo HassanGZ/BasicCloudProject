@@ -1,0 +1,45 @@
+<!--Name:PRADEEP RAVICHANDRAN
+ID:1001553352
+CSE 6331-Cloud Computing
+Assignment 1
+-->
+<!doctype html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+	<body background="./static/azure1.jpg" alt="Cloud">
+
+		<center>
+		<header> <h1 style="color:white;"> Welcome to My Azure Cloud </h1> </header>
+		<br> <br>
+		<!--<h2> This portal records the details of students (Name, Address, State and ZIP)</h2> -->
+            <h2>Pradeep Ravichandran</h2>
+            <h2>1001553352</h2>
+            <h2>{{size}}</h2>
+            <h3> Upload CSV Files and Pictures here !! </h3>
+            <form action="{{ url_for('csvtodb') }}" method="POST" enctype = "multipart/form-data">
+            CSV File:  <input type="file" name="myfile" class="filestyle" data-classButton="btn btn-success" data-input="false"><br>
+            <br>
+            <input type="submit" name="Submit"><br>
+            </form>
+            <br>
+            <form action="{{ url_for('csvtodb') }}" method="POST" enctype = "multipart/form-data">
+            Picture:   <input type="file" name="images" class="filestyle" data-classButton="btn btn-success" data-input="false"><br>
+		    <br>
+            <input type="submit" name="Submit"><br>
+            </form>
+            <br>
+            <!--<img src="https://elearn.uta.edu/bbcswebdav/pid-7154598-dt-content-rid-131266510_2/courses/2185-ADV-TOPICS-IN-DATABASE-SYSTEMS-53665-004/me.jpg" alt="me">-->
+            <!--<h2><a href="/course">Search Course Details</a></h2>-->
+            <h2><a href="/getsize" style="color:white;">Size</a></h2>
+	    	<h2><a href = "/list" style="color:white;">Retrieve People Details</a></h2>
+            <h2><a href = "/deletionpage" style="color:white;">Delete User</a></h2>
+            <h2><a href="/editingpage" style="color:white;">Edit </a> </h2>
+           <h2><a href="/namesearch" style="color:white;">Search by Name </a> </h2>
+            <h2><a href="/gradesearch" style="color:white;">Search using Grade </a> </h2>
+            <h2><a href="/newpic" style="color:white;">Add picture </a> </h2>
+
+        </center>
+	</body>
+</html>
