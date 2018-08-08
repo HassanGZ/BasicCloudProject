@@ -7,9 +7,4 @@ This repository can directly be deployed to Azure App Service.
 
 For more information, please see the [Python on App Service Quickstart docs](https://docs.microsoft.com/en-us/azure/app-service-web/app-service-web-get-started-python).
 
-# Contributing
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-=======
-# cloud_uta
->>>>>>> 813e984da91fdd5feb4f69096e160269aca4df24
+This Basic Cloud Project was done using Python and Flask web framework and deployed on Microsoft Azure. Converted a .csv file into a database table. Inserting files and pictures is handled. Searching people by name and grade is done in this project. Project was hosted using a python webapp in Azure and tested.
